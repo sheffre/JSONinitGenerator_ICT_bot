@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru">
+<img src="logo_full.png" class="center" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма Жюри и Команды</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Добавление Жюри и Команды</h1>
+
+    <div id="region-section">
+        <label for="region-select">Выберите регион:</label>
+        <select id="region-select">
+            <option value="" disabled selected>Выберите регион</option>
+        </select>
+    </div>
+
+    <div id="jury-section">
+        <button id="add-jury">Добавить жюри</button>
+        <div id="jury-forms"></div>
+    </div>
+
+    <div id="team-section">
+        <button id="add-team">Добавить команду</button>
+        <div id="team-forms"></div>
+    </div>
+
+    <button id="generate-file">Сформировать файл</button>
+
+    <script src="script.js"></script>
+</body>
+</html>
