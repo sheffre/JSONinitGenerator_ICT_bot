@@ -1,165 +1,128 @@
-// Загрузка списка регионов из файла regions.json
-fetch('./regions.json')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(regions => {
-        const regionSelect = document.getElementById('region-select');
-        regions.forEach(region => {
-            const option = document.createElement('option');
-            option.value = region.id;
-            option.textContent = `${region.id} ${region.name}`;  // Формат "id Название региона"
-            regionSelect.appendChild(option);
-        });
-    })
-    .catch(error => console.error('Ошибка загрузки регионов:', error));
+document.getElementById('add-jury-btn').addEventListener('click', addJury);
+document.getElementById('add-team-btn').addEventListener('click', addTeam);
+document.getElementById('generate-json-btn').addEventListener('click', generateJson);
 
-document.getElementById('add-jury').addEventListener('click', function() {
-    const juryForm = document.createElement('form');
-    juryForm.classList.add('jury-form');
-
-    const lastName = createInput('Фамилия', 'text', true);
-    const firstName = createInput('Имя', 'text', true);
-    const middleName = createInput('Отчество', 'text', false);
-
-    juryForm.appendChild(lastName);
-    juryForm.appendChild(firstName);
-    juryForm.appendChild(middleName);
-
-    document.getElementById('jury-forms').appendChild(juryForm);
+// Добавление обработчика события для подтверждения обновления страницы
+window.addEventListener('beforeunload', function (event) {
+    event.preventDefault();
+    event.returnValue = 'Вы уверены, что хотите обновить страницу? Внесённые изменения не сохранятся!';
 });
 
-document.getElementById('add-team').addEventListener('click', function() {
-    const teamForm = document.createElement('form');
-    teamForm.classList.add('team-form');
+function addJury() {
+    const juryContainer = document.getElementById('jury-container');
+    const juryDiv = document.createElement('div');
+    juryDiv.classList.add('jury');
+    juryDiv.innerHTML = `
+        <input type="text" placeholder="Фамилия" required>
+        <input type="text" placeholder="Имя" required>
+        <input type="text" placeholder="Отчество">
+        <button class="delete-jury-btn">Удалить жюри</button>
+    `;
+    juryContainer.appendChild(juryDiv);
+    
+    juryDiv.querySelector('.delete-jury-btn').addEventListener('click', () => {
+        juryDiv.remove();
+    });
+}
 
-    const teamName = createInput('Название команды', 'text', true);
-    const participantsCount = createInput('Количество участников', 'number', true);
+function addTeam() {
+    const teamsContainer = document.getElementById('teams-container');
+    const teamDiv = document.createElement('div');
+    teamDiv.classList.add('team');
+    
+    teamDiv.innerHTML = `
+        <input type="text" placeholder="Название команды" required>
+        <input type="number" min="1" placeholder="Место в жеребьевке" required class="draw-position">
+        <button class="collapse-team-btn">Свернуть</button>
+        <div class="members-container"></div>
+        <button class="add-member-btn">Добавить участника</button>
+        <button class="delete-team-btn">Удалить команду</button>
+    `;
 
-    participantsCount.addEventListener('input', function() {
-        const count = parseInt(participantsCount.value) || 0;
-        const participantsContainer = teamForm.querySelector('.participants-container') || document.createElement('div');
-        participantsContainer.classList.add('participants-container');
-        participantsContainer.innerHTML = '';  // Очищаем контейнер
+    const membersContainer = teamDiv.querySelector('.members-container');
+    let memberCount = 3;
 
-        if (count < 3 || count > 6) {
-            alert('Количество участников должно быть не менее 3 и не более 6.');
-            return;
+    // Автоматически добавляем 3 участника при создании команды
+    for (let i = 0; i < 3; i++) {
+        addMember(membersContainer);
+    }
+
+    teamsContainer.appendChild(teamDiv);
+
+    const addMemberBtn = teamDiv.querySelector('.add-member-btn');
+    const collapseTeamBtn = teamDiv.querySelector('.collapse-team-btn');
+
+    // Логика добавления и удаления участников команды
+    addMemberBtn.addEventListener('click', () => {
+        if (memberCount < 6) {
+            addMember(membersContainer);
+            memberCount++;
         }
-
-        for (let i = 1; i <= count; i++) {
-            const participant = document.createElement('div');
-            participant.textContent = `Участник ${i}`;
-            const lastName = createInput('Фамилия', 'text', true);
-            const firstName = createInput('Имя', 'text', true);
-            const middleName = createInput('Отчество', 'text', false);
-            
-            participant.appendChild(lastName);
-            participant.appendChild(firstName);
-            participant.appendChild(middleName);
-            
-            participantsContainer.appendChild(participant);
+        if (memberCount === 6) {
+            addMemberBtn.disabled = true;
         }
-
-        teamForm.appendChild(participantsContainer);
     });
 
-    teamForm.appendChild(teamName);
-    teamForm.appendChild(participantsCount);
-
-    document.getElementById('team-forms').appendChild(teamForm);
-});
-
-document.getElementById('generate-file').addEventListener('click', function() {
-    const data = {
-        region: document.getElementById('region-select').value,  // Добавляем регион в данные
-        jury: [],
-        teams: []
-    };
-
-    let isValid = true;
-
-    // Собираем данные жюри
-    document.querySelectorAll('.jury-form').forEach(form => {
-        const lastName = form.querySelector('input[placeholder="Фамилия"]').value.trim();
-        const firstName = form.querySelector('input[placeholder="Имя"]').value.trim();
-        const middleName = form.querySelector('input[placeholder="Отчество"]').value.trim();
-
-        if (!lastName || !firstName) {
-            alert('Фамилия и имя жюри обязательны для заполнения!');
-            isValid = false;
-            return;
-        }
-
-        const juryMember = {
-            lastName,
-            firstName,
-            middleName
-        };
-        data.jury.push(juryMember);
+    teamDiv.querySelector('.delete-team-btn').addEventListener('click', () => {
+        teamDiv.remove();
     });
 
-    if (!isValid) return;
+    collapseTeamBtn.addEventListener('click', () => {
+        membersContainer.classList.toggle('hidden');
+        collapseTeamBtn.textContent = membersContainer.classList.contains('hidden') ? 'Развернуть' : 'Свернуть';
+    });
+    
+    function addMember(container) {
+        const memberDiv = document.createElement('div');
+        memberDiv.classList.add('member');
+        memberDiv.innerHTML = `
+            <input type="text" placeholder="Фамилия" required>
+            <input type="text" placeholder="Имя" required>
+            <input type="text" placeholder="Отчество">
+            <button class="delete-member-btn">Удалить участника</button>
+        `;
+        container.appendChild(memberDiv);
 
-    // Собираем данные команд
-    document.querySelectorAll('.team-form').forEach(form => {
-        const teamName = form.querySelector('input[placeholder="Название команды"]').value.trim();
-        const participantsContainer = form.querySelector('.participants-container');
-        const participants = [];
-
-        if (!teamName) {
-            alert('Название команды обязательно для заполнения!');
-            isValid = false;
-            return;
-        }
-
-        participantsContainer.querySelectorAll('div').forEach(participant => {
-            const lastName = participant.querySelector('input[placeholder="Фамилия"]').value.trim();
-            const firstName = participant.querySelector('input[placeholder="Имя"]').value.trim();
-            const middleName = participant.querySelector('input[placeholder="Отчество"]').value.trim();
-
-            if (!lastName || !firstName) {
-                alert('Фамилия и имя участников обязательны для заполнения!');
-                isValid = false;
-                return;
+        memberDiv.querySelector('.delete-member-btn').addEventListener('click', () => {
+            if (memberCount > 3) {
+                memberDiv.remove();
+                memberCount--;
+                addMemberBtn.disabled = false;
             }
-
-            participants.push({
-                lastName,
-                firstName,
-                middleName
-            });
         });
+    }
+}
 
-        if (!isValid) return;
+function generateJson() {
+    const teamsContainer = document.getElementById('teams-container');
+    const teams = [...teamsContainer.querySelectorAll('.team')].map(teamDiv => {
+        const teamName = teamDiv.querySelector('input[placeholder="Название команды"]').value;
+        const drawPosition = parseInt(teamDiv.querySelector('.draw-position').value, 10);
+        
+        const members = [...teamDiv.querySelectorAll('.member')].map(memberDiv => ({
+            lastName: memberDiv.querySelector('input[placeholder="Фамилия"]').value,
+            firstName: memberDiv.querySelector('input[placeholder="Имя"]').value,
+            middleName: memberDiv.querySelector('input[placeholder="Отчество"]').value
+        }));
 
-        const team = {
-            teamName,
-            participants
-        };
-
-        data.teams.push(team);
+        return { teamName, drawPosition, members };
     });
 
-    if (!isValid) return;
+    // Сортируем команды по "Место в жеребьевке"
+    teams.sort((a, b) => a.drawPosition - b.drawPosition);
 
-    // Создаем и скачиваем JSON-файл
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    // Генерация JSON
+    const json = JSON.stringify({ teams }, null, 2);
+    downloadJson(json, 'teams.json');
+}
+
+function downloadJson(data, filename) {
+    const blob = new Blob([data], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'jury_teams_data.json';
+    a.download = filename;
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
-});
-
-function createInput(placeholder, type = 'text', required = false) {
-    const input = document.createElement('input');
-    input.type = type;
-    input.placeholder = placeholder;
-    input.required = required;
-    return input;
+    document.body.removeChild(a);
 }

@@ -1,33 +1,26 @@
 <!DOCTYPE html>
 <html lang="ru">
-<img src="logo_full.png" class="center" />
+<center>
+    <img src="logo_full.png" class="center" />
+</center>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Форма Жюри и Команды</title>
+    <title>Команды и жюри</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Добавление Жюри и Команды</h1>
+    <h1>Управление командами и жюри</h1>
 
-    <div id="region-section">
-        <label for="region-select">Выберите регион:</label>
-        <select id="region-select">
-            <option value="" disabled selected>Выберите регион</option>
-        </select>
-    </div>
+    <button id="add-jury-btn">Добавить жюри</button>
+    <button id="add-team-btn">Добавить команду</button>
+    <button id="generate-json-btn">Сформировать файл</button>
 
-    <div id="jury-section">
-        <button id="add-jury">Добавить жюри</button>
-        <div id="jury-forms"></div>
-    </div>
+    <h2>Жюри</h2>
+    <div id="jury-container"></div>
 
-    <div id="team-section">
-        <button id="add-team">Добавить команду</button>
-        <div id="team-forms"></div>
-    </div>
-
-    <button id="generate-file">Сформировать файл</button>
+    <h2>Команды</h2>
+    <div id="teams-container"></div>
 
     <script src="script.js"></script>
 </body>
