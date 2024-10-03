@@ -110,7 +110,8 @@ function addTeam() {
 }
 
 function generateJson() {
-    // Получаем название турнира, количество этапов и регион
+    // Получаем пароль, название турнира, количество этапов и регион
+    const password = document.getElementById('password').value;
     const tournamentName = document.getElementById('tournament-name').value;
     const numberOfStages = parseInt(document.getElementById('number-of-stages').value, 10);
     const region = document.getElementById('region-select').value;
@@ -143,11 +144,11 @@ function generateJson() {
     teams.sort((a, b) => a.drawPosition - b.drawPosition);
 
     // Генерация JSON с турниром, количеством этапов, регионом, жюри и командами
-    const jsonContent = JSON.stringify({ numberOfStages, region, jury, teams }, null, 2);
+    const jsonContent = JSON.stringify({ tournamentName, numberOfStages, region, jury, teams }, null, 2);
     
     // Формируем текст для .txt-файла
-    const txtContent = `/rt ${tournamentName} ${jsonContent}`;
-    downloadTxt(txtContent, 'tournament_data.txt');
+    const txtContent = `/rt ${password} ${jsonContent}`;
+    downloadTxt(txtContent, 'init.txt');
 }
 
 function downloadTxt(data, filename) {
