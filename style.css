@@ -43,3 +43,25 @@ button {
 #teams-container .team {
     margin-right: 10px;
 }
+
+.form-row {
+    display: flex;
+    gap: 20px; /* Отступы между полями */
+    align-items: center; /* Вертикальное выравнивание по центру */
+}
+
+.form-row div {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-row label {
+    margin-bottom: 5px; /* Отступ между надписью и полем ввода */
+}
+
+.form-row input,
+.form-row select {
+    padding: 5px;
+    font-size: 16px;
+    width: 200px; /* Устанавливаем фиксированную ширину для полей */
+}

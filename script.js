@@ -2,6 +2,21 @@ document.getElementById('add-jury-btn').addEventListener('click', addJury);
 document.getElementById('add-team-btn').addEventListener('click', addTeam);
 document.getElementById('generate-json-btn').addEventListener('click', generateJson);
 
+// Загрузка регионов из файла regions.json и добавление в выпадающее меню
+fetch('regions.json')
+    .then(response => response.json())
+    .then(data => {
+        const regionSelect = document.getElementById('region-select');
+        data.forEach(region => {
+            const option = document.createElement('option');
+            option.value = region.name;
+            option.textContent = region.name;
+            option.id = `id ${region.name}`;
+            regionSelect.appendChild(option);
+        });
+    })
+    .catch(error => console.error('Ошибка при загрузке регионов:', error));
+
 // Добавление обработчика события для подтверждения обновления страницы
 window.addEventListener('beforeunload', function (event) {
     event.preventDefault();
@@ -95,6 +110,21 @@ function addTeam() {
 }
 
 function generateJson() {
+    // Получаем название турнира, количество этапов и регион
+    const tournamentName = document.getElementById('tournament-name').value;
+    const numberOfStages = parseInt(document.getElementById('number-of-stages').value, 10);
+    const region = document.getElementById('region-select').value;
+
+    // Собираем данные о жюри
+    const juryContainer = document.getElementById('jury-container');
+    const jury = [...juryContainer.querySelectorAll('.jury')].map(juryDiv => ({
+        lastName: juryDiv.querySelector('input[placeholder="Фамилия"]').value,
+        firstName: juryDiv.querySelector('input[placeholder="Имя"]').value,
+        middleName: juryDiv.querySelector('input[placeholder="Отчество"]').value,
+        achievements: juryDiv.querySelector('input[placeholder="Регалии"]').value
+    }));
+
+    // Собираем данные о командах
     const teamsContainer = document.getElementById('teams-container');
     const teams = [...teamsContainer.querySelectorAll('.team')].map(teamDiv => {
         const teamName = teamDiv.querySelector('input[placeholder="Название команды"]').value;
@@ -112,13 +142,16 @@ function generateJson() {
     // Сортируем команды по "Место в жеребьевке"
     teams.sort((a, b) => a.drawPosition - b.drawPosition);
 
-    // Генерация JSON
-    const json = JSON.stringify({ teams }, null, 2);
-    downloadJson(json, 'teams.json');
+    // Генерация JSON с турниром, количеством этапов, регионом, жюри и командами
+    const jsonContent = JSON.stringify({ numberOfStages, region, jury, teams }, null, 2);
+    
+    // Формируем текст для .txt-файла
+    const txtContent = `/rt ${tournamentName} ${jsonContent}`;
+    downloadTxt(txtContent, 'tournament_data.txt');
 }
 
-function downloadJson(data, filename) {
-    const blob = new Blob([data], { type: 'application/json' });
+function downloadTxt(data, filename) {
+    const blob = new Blob([data], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;

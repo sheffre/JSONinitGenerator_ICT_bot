@@ -10,6 +10,29 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <h1>Основная информация о Турнире</h1>
+    
+    <div class="form-row">
+        <div>
+            <label for="tournament-name">Название турнира:</label>
+            <input type="text" id="tournament-name" required>
+        </div>
+    
+        <div>
+            <label for="number-of-stages">Количество этапов:</label>
+            <input type="number" id="number-of-stages" min="1" required>
+        </div>
+    
+        <div>
+            <label for="region-select">Выберите регион:</label>
+            <select id="region-select" required>
+                <option value="" disabled selected>Выберите регион</option>
+            </select>
+        </div>
+    </div>
+    
+    
+
     <h1>Управление командами и жюри</h1>
 
     <button id="add-jury-btn">Добавить жюри</button>
