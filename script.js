@@ -16,6 +16,7 @@ function addJury() {
         <input type="text" placeholder="Фамилия" required>
         <input type="text" placeholder="Имя" required>
         <input type="text" placeholder="Отчество">
+        <input type="text" placeholder="Регалии">
         <button class="delete-jury-btn">Удалить жюри</button>
     `;
     juryContainer.appendChild(juryDiv);
