@@ -1,54 +1,54 @@
 <!DOCTYPE html>
 <html lang="ru">
-<center>
-    <img src="logo_full.png" class="center" />
-</center>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Команды и жюри</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Подключаем шрифт Days One через Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&display=swap" rel="stylesheet">
+
 </head>
 <body>
-    <h1>Основная информация о Турнире</h1>
-    
-    <div class="form-row">
-        <div>
-            <label for="password">Пароль документа:</label>
-            <input type="text" id="password" required>
+    <div class="container">
+        <!-- Логотип турнира -->
+        <img src="transparent_logo_full.png" class="center" alt="Логотип Межрегиональный химический турнир" />
+
+        <h1>Основная информация о Турнире</h1>
+
+        <div class="form-row">
+            <div>
+                <label for="password">Пароль документа:</label>
+                <input type="text" id="password" required>
+            </div>
+
+            <div>
+                <label for="tournament-name">Название турнира:</label>
+                <input type="text" id="tournament-name" required>
+            </div>
+
+            <div>
+                <label for="region-select">Выберите регион:</label>
+                <select id="region-select" required>
+                    <option value="" disabled selected>Выберите регион</option>
+                </select>
+            </div>
         </div>
 
-        <div>
-            <label for="tournament-name">Название турнира:</label>
-            <input type="text" id="tournament-name" required>
+        <div id="jury-list">
+            <h2>Список жюри</h2>
+            <button id="add-jury-btn">Добавить жюри</button>
+            <div id="jury-container"></div>
         </div>
-    
-        <div>
-            <label for="number-of-stages">Количество этапов:</label>
-            <input type="number" id="number-of-stages" min="1" required>
+
+        <div id="tournament-constructor">
+            <h2>Конструктор турнира</h2>
+            <button id="add-stage-btn">Добавить этап</button>
+            <div id="stages-container"></div>
         </div>
-    
-        <div>
-            <label for="region-select">Выберите регион:</label>
-            <select id="region-select" required>
-                <option value="" disabled selected>Выберите регион</option>
-            </select>
-        </div>
+
+        <button id="generate-json-btn">Сформировать файл</button>
     </div>
-    
-    
-
-    <h1>Управление командами и жюри</h1>
-
-    <button id="add-jury-btn">Добавить жюри</button>
-    <button id="add-team-btn">Добавить команду</button>
-    <button id="generate-json-btn">Сформировать файл</button>
-
-    <h2>Жюри</h2>
-    <div id="jury-container"></div>
-
-    <h2>Команды</h2>
-    <div id="teams-container"></div>
 
     <script src="script.js"></script>
 </body>
