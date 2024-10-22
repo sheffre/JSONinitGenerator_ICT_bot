@@ -99,10 +99,33 @@ button:hover {
 
 /* Стиль для секций */
 .section-jury-container {
-    padding: 10px;
+    display: flex; /* Используем Flexbox для выравнивания элементов по горизонтали */
+    flex-wrap: wrap; /* Если элементов будет слишком много, они будут переноситься на следующую строку */
+    gap: 10px; /* Отступы между жюри */
+    margin-top: 10px;
+}
+
+.section-jury-container div {
+    display: flex;
+    align-items: center;
+    padding: 5px;
     background-color: #ecf0f1;
     border-radius: 5px;
-    margin-top: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.section-jury-container button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.section-jury-container button:hover {
+    background-color: #c0392b;
 }
 
 /* Анимации */

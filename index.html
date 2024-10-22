@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Команды и жюри</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Подключаем шрифт Days One через Google Fonts -->
+    <!-- Подключаем шрифт Days One -->
     <link href="https://fonts.googleapis.com/css2?family=Days+One&display=swap" rel="stylesheet">
-
 </head>
 <body>
     <div class="container">
@@ -35,16 +34,25 @@
             </div>
         </div>
 
+        <!-- Список жюри -->
         <div id="jury-list">
             <h2>Список жюри</h2>
             <button id="add-jury-btn">Добавить жюри</button>
             <div id="jury-container"></div>
         </div>
 
+        <!-- Конструктор турнира -->
         <div id="tournament-constructor">
             <h2>Конструктор турнира</h2>
             <button id="add-stage-btn">Добавить этап</button>
             <div id="stages-container"></div>
+        </div>
+
+        <!-- Добавление команды -->
+        <div id="team-list">
+            <h2>Команды</h2>
+            <button id="add-team-btn">Добавить команду</button>
+            <div id="teams-container"></div>
         </div>
 
         <button id="generate-json-btn">Сформировать файл</button>
