@@ -287,6 +287,7 @@ function generateJson() {
     const tournamentName = document.getElementById('tournament-name').value;
     const region = document.getElementById('region-select').value;
 
+    // Собираем данные о жюри и командах
     const jury = jury_dict;
     const stagesContainer = document.getElementById('stages-container');
     const stages = [...stagesContainer.querySelectorAll('.stage')].map(stageDiv => {
@@ -312,12 +313,15 @@ function generateJson() {
         return { team_name: teamName, draw_position: drawPosition, members };
     });
 
-    const jsonContent = JSON.stringify({ tournament_name: tournamentName, region, jury, stages, teams }, null, 2);
-    downloadTxt(jsonContent, 'tournament_data.json');
+    // Форматируем данные для .txt файла
+    const txtContent = `/rt ${password} ${JSON.stringify({ tournament_name: tournamentName, region, jury, stages, teams }, null, 2)}`;
+    
+    // Сохраняем как .txt
+    downloadTxt(txtContent, 'init.txt');
 }
 
 function downloadTxt(data, filename) {
-    const blob = new Blob([data], { type: 'application/json' });
+    const blob = new Blob([data], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
