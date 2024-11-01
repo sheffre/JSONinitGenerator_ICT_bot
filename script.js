@@ -314,7 +314,7 @@ function generateJson() {
     });
 
     // Форматируем данные для .txt файла
-    const txtContent = `/rt ${password} ${JSON.stringify({ tournament_name: tournamentName, region, jury, stages, teams }, null, 2)}`;
+    const txtContent = `/rt ${password} ${JSON.stringify({ tournament_name: tournamentName, region, jury, jury_by_section: stages, teams }, null, 2)}`;
     
     // Сохраняем как .txt
     downloadTxt(txtContent, 'init.txt');
